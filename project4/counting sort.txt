@@ -1,0 +1,17 @@
+it only can handle arrays that have nonnegative integer vallues and nothing else
+however this restriction allows it to be much more effcient than more generic comparison-based soring algorithms.
+the way it works is that first cont up howmany times each value appears in the array
+then we use these counts to calculate how many values are less than or eqal to each particular element in the array
+once you know how many values are less than or equal to an element you know what postion 
+it needs to be placed in to be sorted, so you acn just put each element into its final.
+-------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------
+pigenhole sort is an integer sorting algorithm thats similar to counting sort
+in that both use the keys of an element index into an auxiliary array.
+the difference is that while counting sort indexes into this array to keep track of the counts of each element
+pigenhole sort actually copies over the element itself and appends it to a list that is contained 
+within each index of auxiliary array 
+in this way the aux array with pigenhole sort ends up containg all of the elements that correspond to particular index in 
+the auxiliary array 
+and this means that once you have everything copied over all you have to do is
+concatenate all of these lists and then you will end up with the sorted

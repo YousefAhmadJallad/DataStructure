@@ -1,0 +1,233 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+typedef struct{
+
+char word[100];
+char meaning[200];
+int wordNo;
+
+} dictonary;
+
+
+int read (FILE *in, dictonary dict[]){
+
+in = fopen("input.txt","r");
+
+if(in == NULL){
+printf("there is an error with the file\n");
+exit(0);
+}
+
+char line[500];
+char arr[401][400];
+int size = 0;
+int x =0;
+while(fgets(line,200,in) != NULL) {
+
+    char *token = strtok(line,".");
+
+        while (token != NULL){
+        strcpy(arr[size],token);
+        size++;
+        token = strtok(NULL, ".");
+     }
+}
+
+int wcount = 1;
+for (int j =0; j < size;j++){
+
+int len = strlen(arr[j]);
+
+if (len <= 3){
+
+
+}
+else if (len > 4){
+
+    char* tok = strtok(arr[j] ,":");
+
+
+    strcpy(dict[x].word,tok);
+    tok = strtok(NULL,":");
+
+    dict[x].wordNo = wcount;
+    wcount++;
+
+    int c =0;
+
+    for(int i=0;i< strlen(tok); i++){
+
+        if (isdigit(tok[i])){
+
+            c++;
+        }
+    }
+    int d = (strlen(tok)) - c;
+    tok[d] = '\0';
+    char linee[50];
+    strcpy(linee,tok);
+
+  strcpy(dict[x].meaning,linee);
+    x++;
+  }
+}
+
+
+char crop[100];
+for(int i =0; i < x ; i++){
+
+    strcpy(crop,dict[i].word);
+
+    if(crop[0] == ' '){
+
+     for(int j=0;j < strlen(crop); j++)
+        crop[j] = crop[j+1];
+
+    }
+
+     strcpy(dict[i].word,crop);
+}
+
+
+return x ;
+}
+
+
+
+void findWord(dictonary dict[],char word[],int x){
+bool ok = true;
+
+for (int i=0 ; i< x;i++){
+if (strcmp(word,dict[i].word) == 0){
+     ok = false;
+    printf("%d. %s:%s\n",dict[i].wordNo,dict[i].word,dict[i].meaning);
+
+   }
+
+}
+if (ok){
+
+    printf("word not found in dictonary");
+}
+
+}
+
+
+void FindCharWord (dictonary dict[],char w,int x){
+  bool ok =true;
+for(int i=0; i < x;i++){
+    if (w == dict[i].word[0]){
+        ok = false;
+       printf("%d. %s:%s\n",dict[i].wordNo,dict[i].word,dict[i].meaning);
+    }
+
+}
+if(ok){
+    printf("word not found in dictonary");
+
+}
+
+}
+
+
+int main(){
+
+FILE *in;
+in = fopen("input.txt","r");
+dictonary dict[400];
+int choice = 0;
+int x;
+int temp;
+char nword[20];
+char nwordmeaning[100];
+
+
+do{
+
+printf("Please select an option\n");
+printf ("1- Read File and build the dictionary\n2- Search for a specific word\n3- Search for all words that start with a character\n4- Insert new word to the dictionary\n5- Save the dictionary back to the file\n6- Exit\n");
+
+  scanf("%d",&choice);
+
+  if(choice > 6 || choice < 1){
+    printf("\nno option with the given number\n");
+
+  }
+
+   switch(choice){
+
+   case 1:
+   x = read(in,dict);
+   //printf("%d\n",x);
+   temp = x;
+   //printf("%d. %s %s",dict[148].wordNo,dict[148].word,dict[148].meaning);
+
+   fclose(in);
+   break;
+
+   case 2:
+    printf("enter the word you want to find\n");
+    char word[50];
+    scanf("%s",word);
+    findWord(dict,word,x);
+    break;
+
+
+
+   case 3:
+    printf("enter character to find all the words that have the same first character");
+    char w;
+    scanf("%s",&w);
+    FindCharWord (dict,w,x);
+      break;
+
+
+
+  case 4:
+    printf("please enter the new word\n");
+    scanf("%s",nword);
+
+    printf("please enter the new word's meaning");
+     scanf(" %[^\n]s",nwordmeaning); //" %[^\n]s" is an expression to read spaces when we enter them as a string
+
+    dict[x].wordNo = x + 1;
+    strcpy(dict[x].word,nword);
+    strcpy(dict[x].meaning,nwordmeaning);
+     x++;
+
+
+    for(int i = 0;i < x;i++){
+   printf("%d. %s:%s",dict[i].wordNo,dict[i].word,dict[i].meaning);
+    }
+   printf("\n\n");
+
+   break;
+
+   case 5:
+     in = fopen("input.txt","a");
+      if(in == NULL){
+        printf("there is an error with the file\n");
+        exit(0);
+     }
+       printf("\n\n");
+       for(int i=temp; i<x;i++){
+       fprintf(in,"%d. %s:%s\t\t",dict[i].wordNo,dict[i].word,dict[i].meaning);
+      }
+
+    fclose(in);
+    break;
+
+   case 6:
+       exit(0);
+       break;
+
+   }
+}while (choice != 6);
+
+
+
+    return 0;
+}
